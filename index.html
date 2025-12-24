@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anniversary Journey</title>
+
+<!-- Prevent indexing -->
+<meta name="robots" content="noindex, nofollow">
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+<style>
+/* ================= BASE ================= */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #2c2f36, #3a3f4b);
+    color: #f1f1f1;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+section {
+    height: 100vh;
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 140px;
+    background-size: cover;
+    background-position: center;
+    clip-path: inset(48% 0 52% 0);
+    opacity: 0;
+    transition: clip-path 1s ease, opacity 1s ease;
+}
+
+section.visible {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+}
+
+section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1;
+}
+
+/* Headings */
+.heading {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    font-size: 2.4rem;
+}
+
+.fancy-heading {
+    font-family: "Dancing Script", cursive;
+    font-size: 3.6rem;
+}
+
+/* Content */
+.content {
+    position: relative;
+    z-index: 3;
+    max-width: 700px;
+}
+
+.body-text {
+    font-size: 1.4rem;
+    transition: opacity 1s ease;
+}
+
+/* ================= VIDEO ================= */
+.video-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    z-index: 0;
+}
+
+.video-section::before { z-index: 1; }
+.video-section .content,
+.video-section .heading { z-index: 2; }
+
+/* ================= FACE GRID ================= */
+.face-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(80px, 110px));
+    grid-template-rows: repeat(3, minmax(80px, 110px));
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.face-block {
+    background: #1f2933;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.face-block img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.face-block.revealed img {
+    opacity: 1;
+}
+
+.face-block.revealed {
+    transform: scale(1.05);
+    opacity: 0.85;
+}
+
+/* ================= REASONS ================= */
+.reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    font-size: 1.7rem;
+}
+
+/* ================= LAST SLIDE ================= */
+.last-slide {
+    animation: zoomBg 20s ease-in-out infinite alternate;
+}
+
+@keyframes zoomBg {
+    from { background-size: 100%; }
+    to   { background-size: 112%; }
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeUp 2s ease forwards;
+}
+
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    .heading { font-size: 1.9rem; }
+    .fancy-heading { font-size: 2.8rem; }
+    .body-text { font-size: 1.1rem; }
+    .reasons { font-size: 1.3rem; }
+    section { padding-top: 120px; }
+}
+
+/* ================= PASSWORD SCREEN ================= */
+#password-screen {
+    position: fixed;
+    inset: 0;
+    background: #2c2f36;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: #f1f1f1;
+}
+
+#password-screen input {
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    border-radius: 5px;
+    border: none;
+}
+
+#password-screen button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background: #4f46e5;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="password-screen">
+    <h2>Enter Password to View</h2>
+    <input type="password" id="password-input" placeholder="Enter password">
+    <button onclick="checkPassword()">Unlock</button>
+</div>
+
+<!-- INTRO -->
+<section>
+    <h1 class="heading fancy-heading">Surprise My Lovely Pinu</h1>
+    <div class="content">
+        <p class="body-text" style="opacity:1;">A journey through our memories...</p>
+    </div>
+</section>
+
+<!-- SLIDE 1 -->
+<section style="background-image:url('https://i.imgur.com/1stImage.jpeg');">
+    <h1 class="heading">Our First Year</h1>
+    <div class="content">
+        <p class="body-text">The beginning of our beautiful story.</p>
+    </div>
+</section>
+
+<!-- SLIDE 2 VIDEO -->
+<section class="video-section">
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+    <h1 class="heading">Your Beauty</h1>
+    <div class="content">
+        <p class="body-text">Click each block to reveal the photo.</p>
+        <div class="face-grid">
+            <div class="face-block"><img src="https://i.imgur.com/child1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/bindi1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/eye1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/ear1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/nose1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/chick1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/pok1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/lips1.jpeg"></div>
+            <div class="face-block"><img src="https://i.imgur.com/last1.jpeg"></div>
+        </div>
+    </div>
+</section>
+
+<!-- SLIDE 3 -->
+<section style="background-image:url('https://i.imgur.com/rowdy1.jpeg');">
+    <h1 class="heading">Forever & Always</h1>
+    <div class="content">
+        <p class="body-text">Every moment is better with you.</p>
+    </div>
+</section>
+
+<!-- SLIDE 4 -->
+<section style="background-image:url('https://i.imgur.com/pose1.jpeg');">
+    <h1 class="heading">Reasons I Love You</h1>
+    <div class="content">
+        <div class="reasons">
+            <div>Your kindness</div>
+            <div>Your patience</div>
+            <div>Your support</div>
+            <div>Our memories</div>
+        </div>
+    </div>
+</section>
+
+<!-- LAST SLIDE -->
+<section class="last-slide" style="background-image:url('https://i.imgur.com/last1.jpeg');">
+    <h1 class="heading fade-in">Thank You</h1>
+    <div class="content fade-in">
+        <p class="body-text">Thank you for loving me, always.</p>
+    </div>
+</section>
+
+<script>
+// PASSWORD PROTECTION
+const correctPassword = "pinu2025"; // change this to your own password
+
+function checkPassword() {
+    const input = document.getElementById("password-input").value;
+    if(input === correctPassword) {
+        document.getElementById("password-screen").style.display = "none";
+    } else {
+        alert("Incorrect password!");
+    }
+}
+
+// SLIDE SCROLL TRANSITION
+const slides = document.querySelectorAll('section');
+
+function handleScroll() {
+    const scrollTop = window.pageYOffset;
+    const windowHeight = window.innerHeight;
+
+    slides.forEach(slide => {
+        const top = slide.offsetTop;
+        const height = slide.offsetHeight;
+        const progress = (scrollTop - top + windowHeight) / (height + windowHeight);
+
+        if (progress > 0.25 && progress < 0.75) {
+            slide.classList.add('visible');
+        } else {
+            slide.classList.remove('visible');
+        }
+    });
+}
+
+window.addEventListener('scroll', handleScroll);
+window.addEventListener('load', handleScroll);
+
+// FACE GRID CLICK
+document.querySelectorAll(".face-block").forEach(block => {
+    block.addEventListener("click", () => {
+        block.classList.toggle("revealed");
+    });
+});
+</script>
+
+</body>
+</html>
