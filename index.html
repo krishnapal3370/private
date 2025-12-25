@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anniversary Journey</title>
 
-<!-- Prevent indexing -->
 <meta name="robots" content="noindex, nofollow">
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -50,7 +49,7 @@ section::before {
     z-index: 1;
 }
 
-/* Headings */
+/* ================= HEADINGS ================= */
 .heading {
     position: absolute;
     top: 25px;
@@ -65,7 +64,7 @@ section::before {
     font-size: 3.6rem;
 }
 
-/* Content */
+/* ================= CONTENT ================= */
 .content {
     position: relative;
     z-index: 3;
@@ -74,7 +73,6 @@ section::before {
 
 .body-text {
     font-size: 1.4rem;
-    transition: opacity 1s ease;
 }
 
 /* ================= VIDEO ================= */
@@ -122,9 +120,7 @@ section::before {
     transition: opacity 0.4s ease;
 }
 
-.face-block.revealed img {
-    opacity: 1;
-}
+.face-block.revealed img { opacity: 1; }
 
 .face-block.revealed {
     transform: scale(1.05);
@@ -149,25 +145,6 @@ section::before {
     to   { background-size: 112%; }
 }
 
-.fade-in {
-    opacity: 0;
-    transform: translateY(25px);
-    animation: fadeUp 2s ease forwards;
-}
-
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-    .heading { font-size: 1.9rem; }
-    .fancy-heading { font-size: 2.8rem; }
-    .body-text { font-size: 1.1rem; }
-    .reasons { font-size: 1.3rem; }
-    section { padding-top: 120px; }
-}
-
 /* ================= PASSWORD SCREEN ================= */
 #password-screen {
     position: fixed;
@@ -178,7 +155,12 @@ section::before {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    color: #f1f1f1;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#password-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
 }
 
 #password-screen input {
@@ -199,6 +181,41 @@ section::before {
     background: #4f46e5;
     color: white;
 }
+
+#password-error {
+    margin-top: 12px;
+    color: #ff4d4d;
+    display: none;
+}
+
+/* ================= SHAKE ANIMATION ================= */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    .heading { font-size: 1.9rem; }
+    .fancy-heading { font-size: 2.8rem; }
+    .body-text { font-size: 1.1rem; }
+    .reasons { font-size: 1.3rem; }
+    section { padding-top: 120px; }
+
+    #password-screen input,
+    #password-screen button {
+        width: 80%;
+        max-width: 280px;
+    }
+}
 </style>
 </head>
 
@@ -209,6 +226,7 @@ section::before {
     <h2>Enter Password to View</h2>
     <input type="password" id="password-input" placeholder="Enter password">
     <button onclick="checkPassword()">Unlock</button>
+    <p id="password-error">❌ Incorrect password</p>
 </div>
 
 <!-- INTRO -->
@@ -227,7 +245,7 @@ section::before {
     </div>
 </section>
 
-<!-- SLIDE 2 VIDEO -->
+<!-- VIDEO SLIDE -->
 <section class="video-section">
     <video class="bg-video" autoplay muted loop playsinline>
         <source src="video/luv.mp4" type="video/mp4">
@@ -244,7 +262,7 @@ section::before {
             <div class="face-block"><img src="images/chick.jpeg"></div>
             <div class="face-block"><img src="images/pok.jpeg"></div>
             <div class="face-block"><img src="images/lips.jpeg"></div>
-            <div class="face-block"><img src="images/pok.jpeg"></div>
+            <div class="face-block"><img src="images/cuti.jpeg"></div>
         </div>
     </div>
 </section>
@@ -272,26 +290,36 @@ section::before {
 
 <!-- LAST SLIDE -->
 <section class="last-slide" style="background-image:url('images/last.jpeg');">
-    <h1 class="heading fade-in">Thank You</h1>
-    <div class="content fade-in">
+    <h1 class="heading">Thank You</h1>
+    <div class="content">
         <p class="body-text">Thank you for loving me, always.</p>
     </div>
 </section>
 
 <script>
-// PASSWORD PROTECTION
-const correctPassword = "pinu2025"; // change this to your own password
+const correctPassword = "pinu2025";
 
 function checkPassword() {
-    const input = document.getElementById("password-input").value;
-    if(input === correctPassword) {
-        document.getElementById("password-screen").style.display = "none";
+    const input = document.getElementById("password-input");
+    const error = document.getElementById("password-error");
+    const screen = document.getElementById("password-screen");
+
+    if (input.value === correctPassword) {
+        error.style.display = "none";
+        screen.classList.add("fade-out");
     } else {
-        alert("Incorrect password!");
+        error.style.display = "block";
+        screen.classList.remove("shake");
+        void screen.offsetWidth;
+        screen.classList.add("shake");
     }
 }
 
-// SLIDE SCROLL TRANSITION
+document.getElementById("password-input").addEventListener("input", () => {
+    document.getElementById("password-error").style.display = "none";
+});
+
+/* SCROLL ANIMATION */
 const slides = document.querySelectorAll('section');
 
 function handleScroll() {
@@ -314,11 +342,9 @@ function handleScroll() {
 window.addEventListener('scroll', handleScroll);
 window.addEventListener('load', handleScroll);
 
-// FACE GRID CLICK
+/* FACE GRID */
 document.querySelectorAll(".face-block").forEach(block => {
-    block.addEventListener("click", () => {
-        block.classList.toggle("revealed");
-    });
+    block.addEventListener("click", () => block.classList.toggle("revealed"));
 });
 </script>
 
